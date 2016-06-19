@@ -1,0 +1,28 @@
+{
+  "name": "thunder",
+  "version": "0.1.0",
+  "description": "Get struck by the God's data",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node -- index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yachaka/Thunder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yachaka/Thunder/issues"
+  },
+  "homepage": "https://github.com/yachaka/Thunder#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0",
+    "local-modules-as-globals": "0.0.3",
+    "nodemon": "^1.9.2"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
