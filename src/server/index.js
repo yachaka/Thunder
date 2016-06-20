@@ -4,7 +4,7 @@ import http from 'http'
 import logger from '../utils/logger'
 import routes from './router'
 
-const log = logger('UDP Server')
+const log = logger('WebSocket Server')
 
 const router = (req, res) => {
 
