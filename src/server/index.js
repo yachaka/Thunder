@@ -6,7 +6,7 @@ import router from './router'
 
 const log = logger('UDP Server')
 
-const createServer = ({ router, isAuthorized, socketHandlers }) => port => {
+const createServer = ({ router, isAuthorized }) => port => {
 
   const httpServer = http.createServer(router)
 
@@ -21,7 +21,7 @@ const createServer = ({ router, isAuthorized, socketHandlers }) => port => {
   wserver.on('request', req => {
     if (!isAuthorized(req)) {
       req.reject()
-      log.warn(`Request was rejected`)
+      log.warn('Request was rejected')
     }
 
     const connection = req.accept('echo-protocol', req.origin)
@@ -30,23 +30,23 @@ const createServer = ({ router, isAuthorized, socketHandlers }) => port => {
 
     connection.on('message', message => {
       switch (message.type) {
-      
-        case 'utf8':
-          log(`Message from ${connection.remoteAddress}: ${message.utf8Data}`)
-          return connection.sendUTF(message.utf8Data)
 
-        case 'binary':
-          log(`Binary from ${connection.remoteAddress}: ${message.binaryData.length}`)
-          return connection.sendBytes(message.binaryData)
+      case 'utf8':
+        log(`Message from ${connection.remoteAddress}: ${message.utf8Data}`)
+        return connection.sendUTF(message.utf8Data)
 
-        default:
-          log.warn(`Unknown message type (${message.type}) from ${connection.remoteAddress}`)
+      case 'binary':
+        log(`Binary from ${connection.remoteAddress}: ${message.binaryData.length}`)
+        return connection.sendBytes(message.binaryData)
+
+      default:
+        log.warn(`Unknown message type (${message.type}) from ${connection.remoteAddress}`)
       }
     })
 
     connection.on('error', e => log.error(e))
 
-    connection.on('close', (reason, desc) => {
+    connection.on('close', () => {
       log.warn(`Connection from ${connection.remoteAddress} closed`)
     })
   })
@@ -54,6 +54,6 @@ const createServer = ({ router, isAuthorized, socketHandlers }) => port => {
 
 createServer({
   router,
-  isAuthorized: e => true,
-  socketHandlers: v => v
+  isAuthorized: () => true,
+  socketHandlers: v => v,
 })(3000)

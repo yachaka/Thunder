@@ -4,7 +4,7 @@ import logger from '../utils/logger'
 const log = logger('Router')
 
 const routes = {
-  '/feed': (req, res) => log.validate('Route found')
+  '/feed': () => log.validate('Route found'),
 }
 
 export default (req, res) => {

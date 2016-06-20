@@ -1,4 +1,6 @@
 
+/* eslint-disable no-console */
+
 import chalk from 'chalk'
 
 const log = (c, f) => m =>
@@ -9,6 +11,8 @@ export default file => Object.assign(
   {
     error: log('red', file),
     validate: log('green', file),
-    warn: log('yellow', file)
+    warn: log('yellow', file),
   }
 )
+
+/* eslint-enable no-console */

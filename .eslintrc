@@ -1,0 +1,10 @@
+{
+  "extends": ["zavatta"],
+  "rules": {
+    "no-multi-str": 0,
+    "comma-dangle": [2, "always-multiline"]
+  },
+  "globals": {
+    "Promise": false
+  }
+}
