@@ -2,23 +2,9 @@
 import { server as WServer } from 'websocket'
 import http from 'http'
 import logger from '../utils/logger'
+import router from './router'
 
 const log = logger('UDP Server')
-
-const router = (req, res) => {
-  log(`Received request for ${req.url}`)
-
-  /*
-   * Create routes
-   */
-
-  // Fallback
-
-  log.warn('Fallback: 404 not found')
-
-  res.writeHead(404)
-  res.end()
-}
 
 const createServer = ({ router, isAuthorized, socketHandlers }) => port => {
 
