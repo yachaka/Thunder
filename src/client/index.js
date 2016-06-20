@@ -1,6 +1,10 @@
 import { client as WebSocketClient } from 'websocket'
 import logger from '../utils/logger'
 
+/*
+ * Testing purpose
+ */
+
 const log = logger('Client')
 const client = new WebSocketClient()
 

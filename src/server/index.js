@@ -6,6 +6,15 @@ import routes from './router'
 
 const log = logger('WebSocket Server')
 
+/*
+ * Very basic Router.
+ *
+ * When a POST /feed is performed by the client,
+ * it is going to look for a field named `POST /feed`
+ * in the routes Object
+ *
+ * if no route has been found, it sends back a 404 Http code
+ */
 const router = (req, res) => {
 
   log(`Received request for ${req.url}`)
@@ -23,6 +32,14 @@ const router = (req, res) => {
   res.end()
 }
 
+/*
+ * router: The http server routes
+ *
+ * isAuthorized: a function that tells if a webSocket connection
+ *    is authorized
+ *
+ * TODO: socketHandlers: A function that takes the WebSocket conenction and processes it
+ */
 const createServer = ({ router, isAuthorized }) => port => {
 
   const httpServer = http.createServer(router)
@@ -36,6 +53,10 @@ const createServer = ({ router, isAuthorized }) => port => {
   wserver.on('error', e => log.error(e.message))
 
   wserver.on('request', req => {
+    /*
+     * FIX: socketHandlers goes here
+     */
+
     if (!isAuthorized(req)) {
       req.reject()
       log.warn('Request was rejected')
