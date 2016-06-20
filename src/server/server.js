@@ -44,28 +44,25 @@ export default ({ routes, authenticate, socketHandler }) => port => {
   const router = createRouter(routes)
 
   const httpServer = http.createServer(router)
+    .listen(port, () => {
+      log(`Server listening on port ${port}`)
+    })
 
-  httpServer.listen(port, () => {
-    log(`Server listening on port ${port}`)
-  })
-
-  const wserver = new WServer({ httpServer, autoAcceptConnections: false })
-
-  wserver.on('error', e => log.error(e.message))
-
-  wserver.on('request', req =>
-    authenticate(req)
-    /*
-     * Goes to the socket Handler
-     */
-      .then(() =>
-        socketHandler(req.accept('echo-protocol', req.origin)))
-     /*
-      * Authorization failed,
-      * for now, we can just log it
-      */
-      .catch(() => {
-        req.reject()
-        log.warn('Request was rejected')
-      }))
+  new WServer({ httpServer, autoAcceptConnections: false })
+    .on('error', e => log.error(e.message))
+    .on('request', req =>
+      authenticate(req)
+      /*
+       * Goes to the socket Handler
+       */
+        .then(() =>
+          socketHandler(req.accept('echo-protocol', req.origin)))
+       /*
+        * Authorization failed,
+        * for now, we can just log it
+        */
+        .catch(() => {
+          req.reject()
+          log.warn('Request was rejected')
+        }))
 }
