@@ -29,7 +29,7 @@ class Subscriber {
   constructor (req) {
 
     this.connection = req.accept('echo-protocol', req.origin)
-    this.event = req.resourceURL.query.listen.split('+')
+    this.event = req.resourceURL.query.listen.split('-and-')
 
     log('Connection from subscriber accepted')
 

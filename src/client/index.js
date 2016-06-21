@@ -19,7 +19,7 @@ export const connect = (address) => new Promise((resolve, reject) => {
 /*
  * Subscriber
  */
-connect('ws://0.0.0.0:3001?listen=facebook')
+connect('ws://0.0.0.0:3001?listen=facebook-and-twitter')
   .then(connection => {
     connection.on('message', message => message.type === 'utf8'
       && log(`Subscriber received message ${message.utf8Data}`))
