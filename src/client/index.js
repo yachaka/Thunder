@@ -15,8 +15,6 @@ client.on('connectFailed', error => {
 client.on('connect', connection => {
   log('WebSocket Client Connected')
 
-  log(connection.connected)
-
   connection.on('error', error => {
     log(`Connection Error: ${error.toString()}`)
   })

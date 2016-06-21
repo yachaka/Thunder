@@ -3,9 +3,9 @@ import logger from '../utils/logger'
 
 const log = logger('Socket')
 
-export default connection => {
+export default (client, connection) => {
 
-  log.validate(`Connection accpeted from ${connection.remoteAddress}`)
+  log.validate(`Connection accpeted from ${client.name}`)
 
   connection.on('message', message => {
 

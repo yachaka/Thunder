@@ -23,7 +23,8 @@ export default req => new Promise((resolve, reject) => {
         return reject(err)
       }
 
-      log(`CouchDB results: ${result.statusCode}`)
-      resolve(result)
+      log(`CouchDB resolved with: ${result.statusCode}`)
+
+      resolve(JSON.parse(result.text).rows[0].value)
     })
 })

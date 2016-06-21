@@ -56,8 +56,8 @@ export default ({ routes, authenticate, socketHandler }) => port => {
       /*
        * Goes to the socket Handler
        */
-        .then(() =>
-          socketHandler(req.accept('echo-protocol', req.origin)))
+        .then(client =>
+          socketHandler(client, req.accept('echo-protocol', req.origin)))
        /*
         * Authorization failed,
         * for now, we can just log it
