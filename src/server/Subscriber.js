@@ -12,7 +12,7 @@ class Subscriber {
   }
 
   want (payload) {
-    return this.event.include(payload.name)
+    return this.event.includes(payload.name)
   }
 
   send (payload) {

@@ -1,45 +1,38 @@
 import { client as WebSocketClient } from 'websocket'
 import logger from '../utils/logger'
 
-/*
- * Testing purpose
- */
-
 const log = logger('Client')
-const client = new WebSocketClient()
 
-client.on('connectFailed', error => {
-  log(`Connect Error: ${error.toString()}`)
+export const connect = (address) => new Promise((resolve, reject) => {
+
+  const client = new WebSocketClient()
+
+  client.on('connectFailed', reject)
+  client.on('error', reject)
+  client.on('connect', resolve)
+  client.connect(address, 'echo-protocol')
 })
 
-client.on('connect', connection => {
-  log('WebSocket Client Connected')
-
-  connection.on('error', error => {
-    log(`Connection Error: ${error.toString()}`)
+/*
+ * Subscriber
+ */
+connect('ws://0.0.0.0:3000?listen=facebook')
+  .then(connection => {
+    connection.on('message', message => message.type === 'utf8'
+      && log(`Subscriber received message ${message.utf8Data}`))
   })
+  .catch(e => log.error(e.message))
 
-  connection.on('close', () => {
-    log('echo-protocol Connection Closed')
+/*
+ * Source
+ */
+connect('ws://0.0.0.0:3000?token=56')
+  .then(connection => {
+    setInterval(() => {
+      connection.sendUTF(JSON.stringify({
+        name: 'facebook',
+        data: 'Hello',
+      }))
+    }, 1000)
   })
-
-  connection.on('message', message => {
-    if (message.type === 'utf8') {
-      log(`Received: ${message.utf8Data}`)
-    }
-  })
-
-  const sendNumber = () => {
-    if (connection.connected) {
-      const number = Math.round(Math.random() * 0xFFFFFF)
-      log(`Sending ${number.toString()}`)
-      connection.sendUTF(number.toString())
-      setTimeout(sendNumber, 1000)
-    }
-  }
-
-  sendNumber()
-})
-
-client.connect('ws://0.0.0.0:3000?token=56', 'echo-protocol')
-
+  .catch(e => log.error(e.message))
