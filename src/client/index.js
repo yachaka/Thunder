@@ -22,7 +22,7 @@ export const connect = (address) => new Promise((resolve, reject) => {
 connect('ws://0.0.0.0:3001?listen=facebook-and-twitter')
   .then(connection => {
     connection.on('message', message => message.type === 'utf8'
-      && log(`Subscriber received message ${message.utf8Data}`))
+      && log(`Subscriber received message ${JSON.parse(message.utf8Data).data}`))
   })
   .catch(e => log.error(`Client: ${e.message}`))
 
