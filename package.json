@@ -6,7 +6,7 @@
   "pre-commit": "lint",
   "scripts": {
     "start": "nodemon --exec babel-node -- index.js",
-    "lint": "eslint src/"
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
