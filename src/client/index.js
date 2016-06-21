@@ -43,5 +43,5 @@ client.on('connect', connection => {
   sendNumber()
 })
 
-client.connect('ws://0.0.0.0:3000/', 'echo-protocol')
+client.connect('ws://0.0.0.0:3000?token=56', 'echo-protocol')
 

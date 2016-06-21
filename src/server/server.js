@@ -50,8 +50,9 @@ export default ({ routes, authenticate, socketHandler }) => port => {
 
   new WServer({ httpServer, autoAcceptConnections: false })
     .on('error', e => log.error(e.message))
-    .on('request', req =>
-      authenticate(req)
+    .on('request', req => {
+
+      return authenticate(req)
       /*
        * Goes to the socket Handler
        */
@@ -64,5 +65,6 @@ export default ({ routes, authenticate, socketHandler }) => port => {
         .catch(() => {
           req.reject()
           log.warn('Request was rejected')
-        }))
+        })
+    })
 }
