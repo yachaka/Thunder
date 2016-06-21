@@ -2,6 +2,7 @@
 import { server as WServer } from 'websocket'
 import http from 'http'
 import logger from '../utils/logger'
+import Subscriber from './Subscriber'
 
 const log = logger('WebSocket Server')
 
@@ -37,7 +38,7 @@ const createRouter = routes => (req, res) => {
  * isAuthorized: a function that tells if a webSocket connection
  *    is authorized
  *
- * TODO: socketHandlers: A function that takes the WebSocket conenction and processes it
+ * socketHandlers: A function that takes the WebSocket conenction and processes it
  */
 export default ({ routes, authenticate, socketHandler }) => port => {
 
@@ -51,6 +52,14 @@ export default ({ routes, authenticate, socketHandler }) => port => {
   new WServer({ httpServer, autoAcceptConnections: false })
     .on('error', e => log.error(e.message))
     .on('request', req => {
+
+      /*
+       * TODO: split this server into a source server and a sub server
+       */
+      if (req.resourceURL.query.listen) {
+        log('Received a Subscribe request')
+        return new Subscriber(req)
+      }
 
       return authenticate(req)
       /*
