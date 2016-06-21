@@ -1,16 +1,25 @@
 
 import routes from './routes'
-import createServer from './server'
+import createSocketServer from './server'
 import authenticate from './authenticate'
 import socketHandler from './socket'
+import Subscriber from './Subscriber'
 
 /*
- * This code is so cute
+ * Initialize the Sources Socket Server
  */
-const server = createServer({
+const sourceServer = createSocketServer({
   routes,
   authenticate,
   socketHandler,
 })
 
-server(3000)
+/*
+ * Initialize the Subscriber server
+ */
+const subscriberServer = createSocketServer({
+  socketHandler: (client, connection) => new Subscriber(connection),
+})
+
+sourceServer('Source Server', 3000)
+subscriberServer('Sub Server', 3001)

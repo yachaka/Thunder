@@ -19,12 +19,12 @@ export const connect = (address) => new Promise((resolve, reject) => {
 /*
  * Subscriber
  */
-connect('ws://0.0.0.0:3000?listen=facebook')
+connect('ws://0.0.0.0:3001?listen=facebook')
   .then(connection => {
     connection.on('message', message => message.type === 'utf8'
       && log(`Subscriber received message ${message.utf8Data}`))
   })
-  .catch(e => log.error(e.message))
+  .catch(e => log.error(`Client: ${e.message}`))
 
 /*
  * Source
@@ -38,4 +38,4 @@ connect('ws://0.0.0.0:3000?token=56')
       }))
     }, 1000)
   })
-  .catch(e => log.error(e.message))
+  .catch(e => log.error(`Facebook: ${e.message}`))

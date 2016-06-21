@@ -2,7 +2,6 @@
 import { server as WServer } from 'websocket'
 import http from 'http'
 import logger from '../utils/logger'
-import Subscriber from './Subscriber'
 
 const log = logger('WebSocket Server')
 
@@ -48,7 +47,11 @@ const createRouter = routes => (req, res) => {
  *
  * socketHandlers: A function that takes the WebSocket conenction and processes it
  */
-export default ({ routes, authenticate, socketHandler }) => port => {
+export default ({
+  routes = {},
+  authenticate = () => Promise.resolve(),
+  socketHandler,
+}) => (name, port) => {
 
   const router = createRouter(routes)
 
@@ -61,28 +64,20 @@ export default ({ routes, authenticate, socketHandler }) => port => {
     .on('error', e => log.error(e.message))
     .on('request', req => {
 
-      /*
-       * TODO:
-       * This is disgusting.
-       * Split this server into a source server and a sub server
-       * there would be 3 servers. One managing the subscription, one the sources,
-       * and the last one the HTTP routes
-       */
-      if (req.resourceURL.query.listen) {
-        log('Received a Subscribe request')
-        return new Subscriber(req)
-      }
-
       return authenticate(req)
         .then(client =>
-          socketHandler(client, req.accept('echo-protocol', req.origin)))
+          socketHandler(client, req))
         /*
          * Authorization failed,
          * for now, we can just log it
          */
-        .catch(() => {
+        .catch(e => {
           log.warn('Request was rejected')
           req.reject()
+
+          if (e) {
+            log.error(e.message)
+          }
         })
     })
 }

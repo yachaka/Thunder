@@ -1,4 +1,8 @@
 
+import logger from '../utils/logger'
+
+const log = logger('Subscriber')
+
 /*
  * At the moment,
  * the subscribers are all stroed in RAM,
@@ -27,6 +31,8 @@ class Subscriber {
     this.connection = req.accept('echo-protocol', req.origin)
     this.event = req.resourceURL.query.listen.split('+')
 
+    log('Connection from subscriber accepted')
+
     Subscriber.list.push(this)
   }
 
@@ -45,6 +51,7 @@ class Subscriber {
    */
   send (payload) {
     this.connection.sendUTF(JSON.stringify(payload))
+    log('Message sent to subscriber')
   }
 
 }

@@ -12,7 +12,9 @@ const log = logger('Socket')
  * TODO:
  * define the payload format to filter it when it arrives and before sending it
  */
-export default (client, connection) => {
+export default (client, req) => {
+
+  const connection = req.accept('echo-protocol', req.origin)
 
   log.validate(`Connection accpeted from ${client.name}`)
 
@@ -23,7 +25,7 @@ export default (client, connection) => {
       return connection.sendUTF('ko')
     }
 
-    log(`Message from ${connection.remoteAddress}: ${message.utf8Data}`)
+    log(`Message from ${connection.remoteAddress}: ${JSON.parse(message.utf8Data).data}`)
 
     /*
      * :'(
