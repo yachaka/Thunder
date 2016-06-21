@@ -3,6 +3,9 @@ import logger from '../utils/logger'
 
 const log = logger('Client')
 
+/*
+ * Cute, right?
+ */
 export const connect = (address) => new Promise((resolve, reject) => {
 
   const client = new WebSocketClient()

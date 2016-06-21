@@ -4,16 +4,19 @@ import emit from './emit'
 
 const log = logger('Socket')
 
+/*
+ * Socket Handler
+ *
+ * called for each socket to handle its connection.
+ *
+ * TODO:
+ * define the payload format to filter it when it arrives and before sending it
+ */
 export default (client, connection) => {
 
   log.validate(`Connection accpeted from ${client.name}`)
 
   connection.on('message', message => {
-
-    /*
-     * FIX: Parse message as JSON straight
-     * away to get the token/content-type etc ?
-     */
 
     if (message.type !== 'utf8') {
       log.warn(`Unknown message type (${message.type}) from ${connection.remoteAddress}`)
@@ -22,6 +25,9 @@ export default (client, connection) => {
 
     log(`Message from ${connection.remoteAddress}: ${message.utf8Data}`)
 
+    /*
+     * :'(
+     */
     let payload
     try {
       payload = JSON.parse(message.utf8Data)
@@ -37,7 +43,7 @@ export default (client, connection) => {
     return emit(payload)
   })
 
-  connection.on('error', e => log.error(e))
+  connection.on('error', e => log.error(e.message))
 
   connection.on('close', () => {
     log.warn(`Connection from ${connection.remoteAddress} closed`)

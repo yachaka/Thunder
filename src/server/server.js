@@ -21,6 +21,14 @@ const createRouter = routes => (req, res) => {
 
   const key = `${req.method} ${req.url}`
 
+  /*
+   * FIX:
+   * Well this needs to be changed,
+   * The whole HTTP route process needs to change.
+   * We should use Express/Koa to handle these routes on another server
+   * so we would get a server managing the websockets and a server managing
+   * the routes
+   */
   if (routes[key]) {
     res.writeHead(200)
     routes[key](req, res)
@@ -54,7 +62,11 @@ export default ({ routes, authenticate, socketHandler }) => port => {
     .on('request', req => {
 
       /*
-       * TODO: split this server into a source server and a sub server
+       * TODO:
+       * This is disgusting.
+       * Split this server into a source server and a sub server
+       * there would be 3 servers. One managing the subscription, one the sources,
+       * and the last one the HTTP routes
        */
       if (req.resourceURL.query.listen) {
         log('Received a Subscribe request')
@@ -62,18 +74,15 @@ export default ({ routes, authenticate, socketHandler }) => port => {
       }
 
       return authenticate(req)
-      /*
-       * Goes to the socket Handler
-       */
         .then(client =>
           socketHandler(client, req.accept('echo-protocol', req.origin)))
-       /*
-        * Authorization failed,
-        * for now, we can just log it
-        */
+        /*
+         * Authorization failed,
+         * for now, we can just log it
+         */
         .catch(() => {
-          req.reject()
           log.warn('Request was rejected')
+          req.reject()
         })
     })
 }

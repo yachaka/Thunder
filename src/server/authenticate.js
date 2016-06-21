@@ -5,6 +5,13 @@ import { getSource } from '../model/source'
 
 const log = logger('Authenticate')
 
+/*
+ * Return a Promise.
+ * The token is sent to the server via querystring..
+ *
+ * TODO:
+ * refresh the token
+ */
 export default req => {
 
   const query = req.resourceURL.query
