@@ -4,7 +4,7 @@
 import chalk from 'chalk'
 
 const log = (c, f) => m =>
-  console.log(chalk[c](`[${new Date()} - ${f}]`), m)
+  console.log(chalk[c](`[${new Date().toISOString().slice(0, 10)} - ${f}]`), m)
 
 /*
  * const log = logger('Logger')
